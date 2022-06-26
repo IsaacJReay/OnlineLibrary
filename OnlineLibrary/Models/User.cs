@@ -15,6 +15,6 @@ public class User {
     public string? UserTel { get; set; } = default!;
     public string? UserEmail { get; set; } = default!;
     public string? UserPassword { get; set; } = default!;
+    public string? FirebaseID { get; set; } = default!;
     public string? PathToUserPhoto { get; set; } = default!;
-
 }
