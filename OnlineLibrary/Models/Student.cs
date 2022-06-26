@@ -6,7 +6,9 @@ namespace OnlineLibrary.Models;
 public class Student
 {
     [Key]
-    public string? StudentID { get; set; } = default!;
+    [ForeignKey("User")]
+    public string? UserID { get; set; } = default!;
+    public virtual User User { get; set; } = default!;
     public string? StudentFatherName { get; set; } = default!;
     public string? StudentMotherName { get; set; } = default!;
     [ForeignKey("Teacher")]
