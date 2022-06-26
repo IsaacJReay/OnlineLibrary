@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/roeunboratharath/Desktop/folders/asp/online-library/OnlineLibrary/OnlineLibrary.csproj": {}
+    "/home/isaac/projects/OnlineLibrary/OnlineLibrary/OnlineLibrary.csproj": {}
   },
   "projects": {
-    "/home/roeunboratharath/Desktop/folders/asp/online-library/OnlineLibrary/OnlineLibrary.csproj": {
+    "/home/isaac/projects/OnlineLibrary/OnlineLibrary/OnlineLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/roeunboratharath/Desktop/folders/asp/online-library/OnlineLibrary/OnlineLibrary.csproj",
+        "projectUniqueName": "/home/isaac/projects/OnlineLibrary/OnlineLibrary/OnlineLibrary.csproj",
         "projectName": "OnlineLibrary",
-        "projectPath": "/home/roeunboratharath/Desktop/folders/asp/online-library/OnlineLibrary/OnlineLibrary.csproj",
-        "packagesPath": "/home/roeunboratharath/.nuget/packages/",
-        "outputPath": "/home/roeunboratharath/Desktop/folders/asp/online-library/OnlineLibrary/obj/",
+        "projectPath": "/home/isaac/projects/OnlineLibrary/OnlineLibrary/OnlineLibrary.csproj",
+        "packagesPath": "/home/isaac/.nuget/packages/",
+        "outputPath": "/home/isaac/projects/OnlineLibrary/OnlineLibrary/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/roeunboratharath/.nuget/NuGet/NuGet.Config"
+          "/home/isaac/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
