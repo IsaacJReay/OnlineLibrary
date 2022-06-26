@@ -14,18 +14,6 @@ public class Enums
         Male,
         Female
     }
-    public enum Subjects
-    {
-        IT,
-        Law,
-        Economic,
-        Tourism,
-        English,
-        Chinese,
-        Accounting,
-        Banking,
-        Finance
-    }
 
     public enum Faculties {
         [Display(Name="Faculty of Economic and Agriculture")]

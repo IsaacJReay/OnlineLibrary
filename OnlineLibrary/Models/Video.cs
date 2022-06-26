@@ -8,7 +8,7 @@ public class Video {
     public string? VideoID { get; set; } = default!;
     public string? PathToVideoThumbnail { get; set; } = default!;
     public string? VideoTitle { get; set; } = default!;
-    public Enums.Subjects VideoSubject { get; set; } = default!;
+    public Enums.Faculties VideoFaculty { get; set; } = default!;
     [ForeignKey("Teacher")]
     public string? TeacherID { get; set; } = default!;
     public virtual Teacher Teacher { get; set; } = default!;

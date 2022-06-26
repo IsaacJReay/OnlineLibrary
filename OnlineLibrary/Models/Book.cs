@@ -8,7 +8,6 @@ public class Book {
     public string? BookID { get; set; } = default!;
     public Enums.FileType BookFileType { get; set; } = default!;
     public string? BookTitle { get; set; } = default!;
-    public Enums.Subjects BookSubject { get; set; } = default!;
     [ForeignKey("Teacher")]
     public string? TeacherID { get; set; } = default!;
     public virtual Teacher Teacher { get; set; } = default!;
