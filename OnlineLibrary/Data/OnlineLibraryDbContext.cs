@@ -11,6 +11,7 @@ namespace OnlineLibrary.Data
         }
 
         public DbSet<Book> Books { get; set; } = default!;
+        public DbSet<User> Users { get; set; } = default!;
         public DbSet<Student> Students { get; set; } = default!;
         public DbSet<Teacher> Teachers { get; set; } = default!;
         public DbSet<Video> Videos { get; set; } = default!;
