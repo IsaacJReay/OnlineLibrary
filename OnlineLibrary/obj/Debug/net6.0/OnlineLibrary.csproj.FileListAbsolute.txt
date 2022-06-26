@@ -28,3 +28,11 @@
 /home/isaac/projects/OnlineLibrary/OnlineLibrary/obj/Debug/net6.0/ref/OnlineLibrary.dll
 /home/isaac/projects/OnlineLibrary/OnlineLibrary/obj/Debug/net6.0/OnlineLibrary.pdb
 /home/isaac/projects/OnlineLibrary/OnlineLibrary/obj/Debug/net6.0/OnlineLibrary.genruntimeconfig.cache
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Humanizer.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.EntityFrameworkCore.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.EntityFrameworkCore.Design.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.EntityFrameworkCore.Relational.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.Extensions.Caching.Memory.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/MySqlConnector.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Pomelo.EntityFrameworkCore.MySql.dll

@@ -5,6 +5,10 @@ namespace OnlineLibrary.Models;
 
 public class Enums
 {
+    public enum Roles {
+        Teacher,
+        Student
+    }
     public enum Genders
     {
         Male,
