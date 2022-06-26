@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "mry6gek/q2CwFdYb91Drr+U34+p3VJIBYL2pqMHj0lV+xn+abRsoTAvfPuRqoyHh5EP0ofug5DlI81k1fdGtEg==",
+  "success": true,
+  "projectFilePath": "/home/roeunboratharath/Desktop/folders/asp/online-library/OnlineLibrary/OnlineLibrary.csproj",
+  "expectedPackageFiles": [
+    "/home/roeunboratharath/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.2/microsoft.aspnetcore.app.ref.6.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
