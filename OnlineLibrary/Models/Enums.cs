@@ -7,7 +7,8 @@ public class Enums
 {
     public enum Roles {
         Teacher,
-        Student
+        Student,
+        Admin
     }
     public enum Genders
     {

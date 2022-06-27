@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineLibrary.Models;
 
-public class User {
+public class StudentDto
+{
     [Key]
     public string? UserID { get; set; } = default!;
     public Enums.Roles UserRole { get; set; } = default!;
@@ -14,7 +15,9 @@ public class User {
     public DateTime UserDateofBirth { get; set; } = default!;
     public string? UserTel { get; set; } = default!;
     public string? UserEmail { get; set; } = default!;
-    public byte[] UserPasswordHash { get; set; } = default!;
-    public byte[] UserPasswordSalt { get; set; } = default!;
-    public string? PathToUserPhoto { get; set; } = default!;
+    public string? UserPassword { get; set; } = default!;
+    public string? StudentFatherName { get; set; } = default!;
+    public string? StudentMotherName { get; set; } = default!;
+    public string? TeacherID { get; set; } = default!;
+    public IFormFile UserPhoto { get; set; } = default!;
 }
