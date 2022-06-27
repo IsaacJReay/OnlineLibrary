@@ -9,7 +9,7 @@ public partial class apiController : Controller
         List<Student> StudentObj = await context.Students.ToListAsync();
         return Json(StudentObj);
     }
-    public async Task<IActionResult> student(string UserID)
+    public async Task<IActionResult> studentByID(string UserID)
     {
         return Json(await Task.Run(() => context.Students.Single(student => student.UserID == UserID)));
     }
