@@ -5,8 +5,8 @@ using OnlineLibrary.Models;
 namespace OnlineLibrary.Controllers;
 public partial class apiController : Controller
 {
-    [HttpPost("registerStudent")]
-    public async Task<IActionResult> RegisterStudent(StudentDto req)
+    [HttpPost]
+    public async Task<IActionResult> registerStudent(StudentDto req)
     {
 
         if (req.UserPassword == null) {
@@ -45,8 +45,8 @@ public partial class apiController : Controller
         return Ok(currentUser);
     }
 
-    [HttpPost("registerTeacher")]
-    public async Task<IActionResult> RegisterTeacher(TeacherDto req)
+    [HttpPost]
+    public async Task<IActionResult> registerTeacher(TeacherDto req)
     {
 
         if (req.UserPassword == null) {
@@ -84,8 +84,8 @@ public partial class apiController : Controller
         return Ok(currentUser);
     }
 
-    [HttpPost("registerAdmin")]
-    public async Task<IActionResult> RegisterAdmin(AdminDto req)
+    [HttpPost]
+    public async Task<IActionResult> registerAdmin(AdminDto req)
     {
 
         if (req.UserPassword == null) {
