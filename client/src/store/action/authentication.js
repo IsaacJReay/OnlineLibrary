@@ -52,3 +52,10 @@ export function setRegisterValidationPasswordConfirmation(payload){
     payload
   };
 }
+
+export function setRegisterButtonDisable(payload){
+  return {
+    type: authenticationType.SET_REGISTER_BUTTON_DISABLE,
+    payload
+  };
+}

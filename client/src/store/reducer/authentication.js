@@ -3,6 +3,7 @@ import { authenticationType } from '../../Constant'
 const initialState = {
   loginModalVisible: false,
   loginButtonDisable: true,
+  registerButtonDisable: true,
   loginValidations: {
     email: false,
     password: false
@@ -72,6 +73,21 @@ export default function authenticationReducer(state = initialState, action){
             ...state.registerValidations,
             password: action.payload
           }
+        };
+
+      case authenticationType.SET_REGISTER_VALIDATION_PASSWORD_CONFIRMATION:
+        return {
+          ...state,
+          registerValidations: {
+            ...state.registerValidations,
+            passwordConfirmation: action.payload
+          }
+        };
+
+      case authenticationType.SET_REGISTER_BUTTON_DISABLE:
+        return {
+          ...state,
+          registerButtonDisable: action.payload
         };
     
       default:

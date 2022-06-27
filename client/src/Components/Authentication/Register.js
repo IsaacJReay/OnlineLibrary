@@ -1,59 +1,78 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Form, { Input } from '../Form';
+import { 
+  setRegisterValidationEmail,
+  setRegisterValidationPasswordConfirmation,
+  setRegisterValidationUsername,
+  setRegisterValidationPassword,
+  setRegisterButtonDisable
+} from '../../store/action/authentication'
 
 function Register(){;
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordConfrimation, setPasswordConfirmation] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [invalidUsername, setInvalidUsername] = useState('');
   const [invalidEmail, setInvalidEmail] = useState('');
   const [invalidPassword, setInvalidPassword] = useState('');
   const [invalidPasswordConfirmation, setInvalidPasswordComfirmation] = useState('');
-  const [usernameValid, setUsernameValid] = useState(false);
-  const [emailValid, setEmailValid] = useState(false);
-  const [passwordValid, setPasswordValid] = useState(false);
-  const [passwordConfirmationValid, setPasswordConfirmationValid] = useState(false); 
+  const registerValidations = useSelector(state => state.authentication.registerValidations);
+  const registerButtonDisable = useSelector(state => state.authentication.registerButtonDisable);
+  const dispatch = useDispatch();
+
+  useEffect(function(){
+    const validations = [];
+
+    for(let key in registerValidations){
+      validations.push(registerValidations[key]);
+    }
+
+    const isValidate = validations.every(validation => validation === true);
+    dispatch(setRegisterButtonDisable(!isValidate));
+  }, [registerValidations, dispatch]);
 
   const handleUsernameChange = useCallback(function(event){
     setUsername(event.target.value);
 
     if(event.target.value === ''){
       setInvalidUsername('Username is required');
-      setUsernameValid(false);
+      dispatch(setRegisterValidationUsername(false));
     }else{
       setInvalidUsername('');
-      setUsernameValid(true);
+      dispatch(setRegisterValidationUsername(true));
     }
-  }, []);
+  }, [dispatch]);
 
   const handleEmailChange = useCallback(function(event){
     setEmail(event.target.value);
 
     if(event.target.value === ''){
       setInvalidEmail('Email is required');
-      setEmailValid(false);
+      dispatch(setRegisterValidationEmail(false));
       return;
     }
 
-    const regExp = /^([a-zA-Z0-9\.\-\_]+)@([a-zA-Z0-9]+)\.([a-z]{2,5})$/g;
+    const regExp = /^([a-zA-Z0-9.\-_]+)@([a-zA-Z0-9]+).([a-z]{2,5})$/g;
 
     if(!regExp.test(event.target.value)){
       setInvalidEmail('Incorrect email');
-      setEmailValid(false);
+      dispatch(setRegisterValidationEmail(false));
     }else{
       setInvalidEmail('');
-      setEmailValid(true);
+      dispatch(setRegisterValidationEmail(true));
     }
-  }, []);
+  }, [dispatch]);
 
   const handlePasswordChange = useCallback(function(event){
     setPassword(event.target.value);
 
     if(event.target.value === ''){
       setInvalidPassword('Password is required');
-      setPasswordValid(false);
+      dispatch(setRegisterValidationPassword(false));
       return;
     }
 
@@ -61,36 +80,38 @@ function Register(){;
 
     if(!regExp.test(event.target.value)){
       setInvalidPassword('Password needs to be 8 characters long, at least one small letter, one capital letter, one number and one symbol');
-      setPasswordValid(false);
+     dispatch(setRegisterValidationPassword(false));
     }else{
       setInvalidPassword('');
-      setPasswordValid(true);
+      dispatch(setRegisterValidationPassword(true));
     }
 
 
-  }, []);
+  }, [dispatch]);
 
   const handlePasswordConfirmationChange = useCallback(function(event){
     setPasswordConfirmation(event.target.value);
 
     if(event.target.value === ''){
       setInvalidPasswordComfirmation('Password confirmation is required');
-      setPasswordConfirmationValid(false);
+      dispatch(setRegisterValidationPasswordConfirmation(false));
       return;
     }
 
     if(password !== event.target.value){
       setInvalidPasswordComfirmation('Password does not match');
-      setPasswordConfirmationValid(false);
+      dispatch(setRegisterValidationPasswordConfirmation(false));
     }else{
       setInvalidPasswordComfirmation('');
-      setPasswordConfirmationValid(true);
+      dispatch(setRegisterValidationPasswordConfirmation(true));
     }
-  }, [password]);
+  }, [password, dispatch]);
 
   const handleSubmit = useCallback(function(event){
     event.preventDefault();
   }, []);
+
+  console.log(invalidUsername);
 
   return (
     <div>
@@ -98,8 +119,9 @@ function Register(){;
         submitTitle="Register" 
         onSubmit={ handleSubmit }
         submitOptions={{
-          disable: true
+          disable: registerButtonDisable
         }}
+
       >
         <Input 
           label="Username" 
@@ -107,6 +129,7 @@ function Register(){;
           onInputChange={ handleUsernameChange }
           invalidMessage={ invalidUsername }
           type="text"
+          valid={ registerValidations.username }
         />
         <Input 
           label="Email" 
@@ -114,6 +137,7 @@ function Register(){;
           onInputChange={ handleEmailChange }
           invalidMessage={ invalidEmail }
           type="email"
+          valid={ registerValidations.email }
         />
         <Input 
           label="Password" 
@@ -121,13 +145,15 @@ function Register(){;
           onInputChange={ handlePasswordChange }
           invalidMessage={ invalidPassword }
           type="password"
+          valid={ registerValidations.password }
         />
         <Input 
           label="Password confirmation" 
-          value={ passwordConfrimation } 
+          value={ passwordConfirmation } 
           onInputChange={ handlePasswordConfirmationChange }
           invalidMessage={ invalidPasswordConfirmation }
-          type="email"
+          type="password"
+          valid={ registerValidations.passwordConfirmation }
         />
       </Form>
     </div>
