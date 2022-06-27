@@ -19,13 +19,13 @@ public partial class apiController : Controller
         this.configuration = configuration;
     }
 
-    protected void CreatePasswordHash(string password, out byte[] passwordhash, out byte[] passwordSalt)
+    protected (byte[], byte[]) CreatePasswordHash(string password)
     {
         using (var hmac = new HMACSHA512())
         {
-            passwordSalt = hmac.Key;
-            passwordhash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return (hmac.Key, hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
         }
+
     }
 
     protected bool VerifyPasswordHash(string UserPassword, byte[] UserpasswordHash, byte[] UserpasswordSalt)

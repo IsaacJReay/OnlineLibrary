@@ -13,7 +13,7 @@ public partial class apiController : Controller
             return BadRequest("Null");
         }
 
-        CreatePasswordHash(req.UserPassword, out byte[] passwordhash, out byte[] passwordSalt);
+        (byte[] passwordhash, byte[] passwordSalt) = await Task.Run(() => CreatePasswordHash(req.UserPassword));
         string filename = await Task.Run(() => UploadPhoto(req.UserPhoto));
 
         User currentUser = new User
@@ -42,7 +42,7 @@ public partial class apiController : Controller
         context.Students.Add(currentStudent); 
         await Task.Run(() => context.SaveChanges());
 
-        return Ok(currentUser);
+        return Ok("Success!");
     }
 
     [HttpPost]
@@ -53,7 +53,7 @@ public partial class apiController : Controller
             return BadRequest("Null");
         }
 
-        CreatePasswordHash(req.UserPassword, out byte[] passwordhash, out byte[] passwordSalt);
+        (byte[] passwordhash, byte[] passwordSalt) = await Task.Run(() => CreatePasswordHash(req.UserPassword));
         string filename = await Task.Run(() => UploadPhoto(req.UserPhoto));
 
         User currentUser = new User
@@ -81,7 +81,7 @@ public partial class apiController : Controller
         context.Teachers.Add(currentTeacher); 
         await Task.Run(() => context.SaveChanges());
 
-        return Ok(currentUser);
+        return Ok("Success!");
     }
 
     [HttpPost]
@@ -92,7 +92,7 @@ public partial class apiController : Controller
             return BadRequest("Null");
         }
 
-        CreatePasswordHash(req.UserPassword, out byte[] passwordhash, out byte[] passwordSalt);
+        (byte[] passwordhash, byte[] passwordSalt) = await Task.Run(() => CreatePasswordHash(req.UserPassword));
         string filename = await Task.Run(() => UploadPhoto(req.UserPhoto));
 
         User currentUser = new User
@@ -113,6 +113,6 @@ public partial class apiController : Controller
         context.Users.Add(currentUser);
         await Task.Run(() => context.SaveChanges());
 
-        return Ok(currentUser);
+        return Ok("Success!");
     }
 }
