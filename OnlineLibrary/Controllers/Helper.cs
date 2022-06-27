@@ -41,7 +41,7 @@ public partial class apiController : Controller
     {
         List<Claim> claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, User.UserID ?? default!)
+            new Claim(ClaimTypes.Name, User.UserID ?? default!, User.UserName)
         };
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings:SecretKey").Value));
         var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
