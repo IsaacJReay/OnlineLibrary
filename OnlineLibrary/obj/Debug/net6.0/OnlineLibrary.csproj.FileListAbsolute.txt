@@ -36,3 +36,8 @@
 /home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.Extensions.Caching.Memory.dll
 /home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/MySqlConnector.dll
 /home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Pomelo.EntityFrameworkCore.MySql.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.IdentityModel.Abstractions.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.IdentityModel.Logging.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/Microsoft.IdentityModel.Tokens.dll
+/home/isaac/projects/OnlineLibrary/OnlineLibrary/bin/Debug/net6.0/System.IdentityModel.Tokens.Jwt.dll

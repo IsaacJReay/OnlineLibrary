@@ -5,8 +5,9 @@ namespace OnlineLibrary.Models;
 
 public class Video {
     [Key]
-    public string? VideoID { get; set; } = default!;
+    public string VideoID { get; set; } = default!;
     public string? PathToVideoThumbnail { get; set; } = default!;
+    public string PathToVideoFile { get; set; } = default!;
     public string? VideoTitle { get; set; } = default!;
     public Enums.Faculties VideoFaculty { get; set; } = default!;
     [ForeignKey("Teacher")]

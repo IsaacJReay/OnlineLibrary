@@ -41,38 +41,44 @@ public partial class apiController : Controller
     {
         List<Claim> claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, User.UserID ?? default!, User.UserName)
+            new Claim(ClaimTypes.Name, User.UserID, User.UserName)
         };
-        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings:SecretKey").Value));
-        var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-        var token = new JwtSecurityToken(
+        SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings:SecretKey").Value));
+        SigningCredentials cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        JwtSecurityToken token = new JwtSecurityToken(
             claims: claims,
             expires: DateTime.Now.AddDays(1),
             signingCredentials: cred
         );
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-        return jwt; 
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    protected string UploadPhoto(IFormFile currentPhoto)
+    protected (string, string) Upload(IFormFile currentFile, bool isPhoto)
     {
-        var destination = Path.Combine("/home/isaac/project/OnlineLibrary/", "image");
-        string? filename = default!;
+        string destination = default!;
+        string extension = default!;
+        if (isPhoto)
+        {
+            destination = Path.Combine("/home/isaac/project/OnlineLibrary/", "image");
+        }
+        else
+        {
+            destination = Path.Combine("/home/isaac/project/OnlineLibrary/", "file");
+        }
+
+        string filename = default!;
         if (!Directory.Exists(destination))
         {
             Directory.CreateDirectory(destination);
         }
 
-        if (currentPhoto != null)
-        {
-            var extension = Path.GetExtension(currentPhoto.FileName);
-            filename = DateTimeOffset.Now.ToUnixTimeSeconds().ToString() + extension;
+        extension = Path.GetExtension(currentFile.FileName);
+        filename = DateTimeOffset.Now.ToUnixTimeSeconds().ToString() + extension;
 
-            var destinationFile = Path.Combine(destination, filename);
-            using FileStream fstream = new FileStream(destinationFile, FileMode.Create);
-            currentPhoto.CopyToAsync(fstream);
+        var destinationFile = Path.Combine(destination, filename);
+        using FileStream fstream = new FileStream(destinationFile, FileMode.Create);
+        currentFile.CopyToAsync(fstream);
 
-        }
-        return filename;
+        return (filename, extension);
     }
 }
