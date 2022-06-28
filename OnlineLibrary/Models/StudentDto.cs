@@ -1,11 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace OnlineLibrary.Models;
 
 public class StudentDto
 {
-    [Key]
     public string? UserID { get; set; } = default!;
     public Enums.Roles UserRole { get; set; } = default!;
     public string? UserName { get; set; } = default!;
