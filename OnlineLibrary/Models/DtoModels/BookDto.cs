@@ -1,6 +1,7 @@
 namespace OnlineLibrary.Models;
 
 public class BookDto {
+    public string? oldBookID;
     public string BookID { get; set; } = default!;
     public string BookTitle { get; set; } = default!;
     public string TeacherID { get; set; } = default!;

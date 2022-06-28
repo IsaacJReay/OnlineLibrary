@@ -8,7 +8,7 @@ public partial class apiController : Controller
 {
     public async Task<IActionResult> addBook(BookDto req)
     {
-        (string BookFileName, string extension) = await Task.Run(() => Upload(req.BookFile, true));
+        (string BookFileName, string extension) = await UploadAsync(req.BookFile, false);
 
         if (Enum.TryParse(extension, out Enums.FileType BookExtension))
         {
@@ -25,8 +25,8 @@ public partial class apiController : Controller
             BookFaculty = req.BookFaculty,
             PathToBookFile = BookFileName
         };
-        context.Books.Add(currentBook);
-        await Task.Run(() => context.SaveChanges());
+        await context.Books.AddAsync(currentBook);
+        await context.SaveChangesAsync();
 
         return Ok("Success!");
     }
@@ -36,13 +36,18 @@ public partial class apiController : Controller
         return Json(BookObj);
     }
 
-    public async Task<IActionResult> bookByID(string BookID)
+    public async Task<IActionResult> bookByID(QueryDto req)
     {
+        if (req.ID == null)
+        {
+            return BadRequest("Missing ID");
+        }
+
         Book currentBook = new Book();
-        
+
         try
         {
-            currentBook = await Task.Run(() => context.Books.Single(book => book.BookID == BookID));
+            currentBook = await context.Books.SingleAsync(book => book.BookID == req.ID);
         }
         catch
         {
@@ -52,12 +57,70 @@ public partial class apiController : Controller
         return Json(currentBook);
     }
 
-    public async Task<IActionResult> bookByFaculty(string Faculty)
+    public async Task<IActionResult> bookByFaculty(QueryDto req)
     {
-        if (Enum.TryParse(Faculty, out Enums.Faculties FacultyEnum))
+        List<Book> currentBooks = new List<Book>();
+
+        try
         {
-            return BadRequest("Faculty Not Found");
-        };
-        return Json(await Task.Run(() => context.Books.Single(book => book.BookFaculty == FacultyEnum)));
+            currentBooks = await context.Books.Where(book => book.BookFaculty == req.Faculty).ToListAsync();
+        }
+        catch
+        {
+            return BadRequest("Not found");
+        }
+
+        return Json(currentBooks);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> editBook(BookDto req)
+    {
+        if (req.oldBookID == null)
+        {
+            return BadRequest("Missing ID");
+        }
+
+        if (await context.Books.FindAsync(req.oldBookID) == null)
+        {
+            return BadRequest("Not found");
+        }
+
+        (string filename, string extension) = await UploadAsync(req.BookFile, false);
+        Enum.TryParse(extension, out Enums.FileType ftype);
+        
+        Book currentBook = await context.Books.FindAsync(req.oldBookID) ?? default!;
+        currentBook.BookID = req.BookID;
+        currentBook.BookFileType = ftype;
+        currentBook.BookDate = req.BookDate;
+        currentBook.BookTitle = req.BookTitle;
+        currentBook.TeacherID = req.TeacherID;
+        currentBook.BookFaculty = req.BookFaculty;
+        currentBook.PathToBookFile = filename;
+
+        await context.SaveChangesAsync();
+
+
+        return Ok("Success!");
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> deleteBook(QueryDto req)
+    {
+        if (req.ID == null)
+        {
+            return BadRequest("Missing ID");
+        }
+
+        if (context.Books.Find(req.ID) == null)
+        {
+            return BadRequest("Not found");
+        }
+
+        Book book = await context.Books.FindAsync(req.ID) ?? default!;
+        context.Books.Remove(book);
+        await context.SaveChangesAsync();
+
+        return Ok("Success!");
     }
 }

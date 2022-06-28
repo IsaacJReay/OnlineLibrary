@@ -12,7 +12,7 @@ public partial class apiController : Controller
         User CurrentUser = new User();
         try
         {
-            CurrentUser = await Task.Run(() => context.Users.Single(User => User.UserID == req.UserID));
+            CurrentUser = await context.Users.SingleAsync(User => User.UserID == req.UserID);
         }
         catch
         {

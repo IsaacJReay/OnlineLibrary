@@ -1,6 +1,7 @@
 namespace OnlineLibrary.Models;
 
 public class AdminDto {
+    public string? oldUserID;
     public string UserID { get; set; } = default!;
     public string UserName { get; set; } = default!;
     public Enums.Genders UserGender { get; set; } = default!;

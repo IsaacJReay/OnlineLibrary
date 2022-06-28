@@ -1,6 +1,7 @@
 namespace OnlineLibrary.Models;
 
 public class VideoDto {
+    public string? oldVideoID;
     public string VideoID { get; set; } = default!;
     public IFormFile VideoThumbnail { get; set; } = default!;
     public IFormFile VideoFile { get; set; } = default!;

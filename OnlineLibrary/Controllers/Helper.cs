@@ -19,20 +19,21 @@ public partial class apiController : Controller
         this.configuration = configuration;
     }
 
-    protected (byte[], byte[]) CreatePasswordHash(string password)
+    protected async Task<(byte[], byte[])> CreatePasswordHashAsync(string password)
     {
         using (HMACSHA512 hmac = new HMACSHA512())
         {
             return (
                 hmac.Key,
                 hmac.ComputeHash(
-                    System.Text.Encoding.UTF8.GetBytes(
-                        password
+                    await Task.Run(
+                        () => System.Text.Encoding.UTF8.GetBytes(
+                            password
+                        )
                     )
                 )
             );
         }
-
     }
 
     protected bool VerifyPasswordHash(string UserPassword, byte[] UserpasswordHash, byte[] UserpasswordSalt)
@@ -75,7 +76,7 @@ public partial class apiController : Controller
         return await Task.Run(() => new JwtSecurityTokenHandler().WriteToken(token));
     }
 
-    protected (string, string) Upload(IFormFile currentFile, bool isPhoto)
+    protected async Task<(string, string)> UploadAsync(IFormFile currentFile, bool isPhoto)
     {
         string destination = isPhoto ? Path.Combine("/home/isaac/project/OnlineLibrary/", "images") : Path.Combine("/home/isaac/project/OnlineLibrary/", "files"); ;
 
@@ -89,7 +90,7 @@ public partial class apiController : Controller
         string destinationFile = Path.Combine(destination, filename);
 
         using FileStream fstream = new FileStream(destinationFile, FileMode.Create);
-        currentFile.CopyToAsync(fstream);
+        await currentFile.CopyToAsync(fstream);
 
         return (filename, extension);
     }

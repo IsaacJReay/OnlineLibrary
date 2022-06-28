@@ -9,8 +9,8 @@ public partial class apiController : Controller
     [HttpPost]
     public async Task<IActionResult> registerTeacher(TeacherDto req)
     {
-        (byte[] passwordhash, byte[] passwordSalt) = await Task.Run(() => CreatePasswordHash(req.UserPassword));
-        (string filename, string? _) = await Task.Run(() => Upload(req.UserPhoto, true));
+        (byte[] passwordhash, byte[] passwordSalt) = await CreatePasswordHashAsync(req.UserPassword);
+        (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
 
         User currentUser = new User
         {
@@ -35,9 +35,9 @@ public partial class apiController : Controller
             TeacherWorkExperience = req.TeacherWorkExperience
         };
 
-        context.Users.Add(currentUser);
-        context.Teachers.Add(currentTeacher);
-        await Task.Run(() => context.SaveChanges());
+        await context.Users.AddAsync(currentUser);
+        await context.Teachers.AddAsync(currentTeacher);
+        await context.SaveChangesAsync();
 
         return Ok("Success!");
     }
@@ -48,13 +48,18 @@ public partial class apiController : Controller
         return Json(TeachersObj);
     }
 
-    public async Task<IActionResult> teacherByID(string UserID)
+    public async Task<IActionResult> teacherByID(QueryDto req)
     {
+        if (req.ID == null)
+        {
+            return BadRequest("Missing ID");
+        }
+
         Teacher currentTeacher = new Teacher();
 
         try
         {
-            currentTeacher = await Task.Run(() => context.Teachers.Single(teacher => teacher.UserID == UserID));
+            currentTeacher = await context.Teachers.SingleAsync(teacher => teacher.UserID == req.ID);
         }
         catch
         {
@@ -62,5 +67,66 @@ public partial class apiController : Controller
         }
 
         return Json(currentTeacher);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> editTeacher(TeacherDto req)
+    {
+        if (req.oldUserID == null)
+        {
+            return BadRequest("Missing Old ID");
+        }
+
+        if (await context.Users.FindAsync(req.oldUserID) == null)
+        {
+            return BadRequest("Not found");
+        }
+
+        (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
+
+
+        Teacher currentTeacher = await context.Teachers.FindAsync(req.oldUserID) ?? default!;
+        currentTeacher.UserID = req.UserID;
+        currentTeacher.TeacherDegree = req.TeacherDegree;
+        currentTeacher.TeacherWorkExperience = req.TeacherWorkExperience;
+
+        User currentUser = await context.Users.FindAsync(req.oldUserID) ?? default!;
+        currentUser.UserID = req.UserID;
+        currentUser.UserName = req.UserName;
+        currentUser.UserGender = req.UserGender;
+        currentUser.UserFaculty = req.UserFaculty;
+        currentUser.UserAddress = req.UserAddress;
+        currentUser.UserDateofBirth = req.UserDateofBirth;
+        currentUser.UserTel = req.UserTel;
+        currentUser.UserEmail = req.UserEmail;
+        currentUser.PathToUserPhoto = filename;
+
+        await context.SaveChangesAsync();
+
+        return Ok("Success!");
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> deleteTeacher(QueryDto req)
+    {
+        if (req.ID == null)
+        {
+            return BadRequest("Missing ID");
+        }
+
+        if (await context.Users.FindAsync(req.ID) == null)
+        {
+            return BadRequest("Not found");
+        }
+
+        Teacher Teacher = await context.Teachers.FindAsync(req.ID) ?? default!;
+        context.Teachers.Remove(Teacher);
+
+        User user = await context.Users.FindAsync(req.ID) ?? default!;
+        context.Users.Remove(user);
+
+        await context.SaveChangesAsync();
+
+        return Ok("Success!");
     }
 }
