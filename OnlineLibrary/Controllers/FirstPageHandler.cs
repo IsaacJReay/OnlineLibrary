@@ -24,7 +24,7 @@ public partial class apiController : Controller
             return BadRequest("Not Found");
         }
 
-        string token = CreateToken(CurrentUser) ?? default!;
+        string token = await CreateToken(CurrentUser);
         return Ok(token);
     }
 

@@ -21,7 +21,7 @@ public partial class apiController : Controller
 
     protected (byte[], byte[]) CreatePasswordHash(string password)
     {
-        using (var hmac = new HMACSHA512())
+        using (HMACSHA512 hmac = new HMACSHA512())
         {
             return (hmac.Key, hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
         }
@@ -30,14 +30,14 @@ public partial class apiController : Controller
 
     protected bool VerifyPasswordHash(string UserPassword, byte[] UserpasswordHash, byte[] UserpasswordSalt)
     {
-        using (var hmac = new HMACSHA512(UserpasswordSalt))
+        using (HMACSHA512 hmac = new HMACSHA512(UserpasswordSalt))
         {
-            var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(UserPassword));
+            byte[] computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(UserPassword));
             return computeHash.SequenceEqual(UserpasswordHash);
         }
     }
 
-    protected string? CreateToken(User User)
+    protected async Task<string> CreateToken(User User)
     {
         List<Claim> claims = new List<Claim>
         {
@@ -45,12 +45,12 @@ public partial class apiController : Controller
         };
         SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings:SecretKey").Value));
         SigningCredentials cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-        JwtSecurityToken token = new JwtSecurityToken(
+        JwtSecurityToken token = await Task.Run(() => new JwtSecurityToken(
             claims: claims,
             expires: DateTime.Now.AddDays(1),
             signingCredentials: cred
-        );
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        ));
+        return await Task.Run(() => new JwtSecurityTokenHandler().WriteToken(token));
     }
 
     protected (string, string) Upload(IFormFile currentFile, bool isPhoto)
@@ -75,7 +75,7 @@ public partial class apiController : Controller
         extension = Path.GetExtension(currentFile.FileName);
         filename = DateTimeOffset.Now.ToUnixTimeSeconds().ToString() + extension;
 
-        var destinationFile = Path.Combine(destination, filename);
+        string destinationFile = Path.Combine(destination, filename);
         using FileStream fstream = new FileStream(destinationFile, FileMode.Create);
         currentFile.CopyToAsync(fstream);
 
