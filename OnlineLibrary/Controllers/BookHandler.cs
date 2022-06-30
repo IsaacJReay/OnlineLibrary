@@ -36,13 +36,9 @@ public partial class apiController : Controller
         
         foreach (Book book in BookObj) 
         {
-            book.BookFaculty = (Enums.Faculties) book.BookFaculty;
             book.Teacher = await context.Teachers.FindAsync(book.TeacherID) ?? default!;
             book.Teacher.User = await context.Users.FindAsync(book.TeacherID) ?? default!;
             book.Teacher.User.UserPasswordHash = "HIDDEN";
-            book.Teacher.User.UserFaculty = (Enums.Faculties) book.Teacher.User.UserFaculty;
-            book.Teacher.User.UserGender = (Enums.Genders) book.Teacher.User.UserGender;
-            book.Teacher.User.UserRole = (Enums.Roles) book.Teacher.User.UserRole;
         }
 
         return Json(BookObj);
@@ -55,13 +51,9 @@ public partial class apiController : Controller
         if (await context.Books.FindAsync(BookID) != null) 
         {
             currentBook = await context.Books.FindAsync(BookID) ?? default!;
-            currentBook.BookFaculty = (Enums.Faculties) currentBook.BookFaculty;
             currentBook.Teacher = await context.Teachers.FindAsync(currentBook.TeacherID) ?? default!;
             currentBook.Teacher.User = await context.Users.FindAsync(currentBook.TeacherID) ?? default!;
             currentBook.Teacher.User.UserPasswordHash = "HIDDEN";
-            currentBook.Teacher.User.UserFaculty = (Enums.Faculties) currentBook.Teacher.User.UserFaculty;
-            currentBook.Teacher.User.UserGender = (Enums.Genders) currentBook.Teacher.User.UserGender;
-            currentBook.Teacher.User.UserRole = (Enums.Roles) currentBook.Teacher.User.UserRole;
         }
         else
         {
@@ -91,13 +83,9 @@ public partial class apiController : Controller
 
         foreach (Book book in currentBooks) 
         {
-            book.BookFaculty = (Enums.Faculties) book.BookFaculty;
             book.Teacher = await context.Teachers.FindAsync(book.TeacherID) ?? default!;
             book.Teacher.User = await context.Users.FindAsync(book.TeacherID) ?? default!;
             book.Teacher.User.UserPasswordHash = "HIDDEN";
-            book.Teacher.User.UserFaculty = (Enums.Faculties) book.Teacher.User.UserFaculty;
-            book.Teacher.User.UserGender = (Enums.Genders) book.Teacher.User.UserGender;
-            book.Teacher.User.UserRole = (Enums.Roles) book.Teacher.User.UserRole;
         }
 
         return Json(currentBooks);

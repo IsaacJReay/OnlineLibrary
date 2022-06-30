@@ -13,9 +13,6 @@ public partial class apiController : Controller
         foreach (User Admin in AdminObj)
         {
             Admin.UserPasswordHash = "HIDDEN";
-            Admin.UserGender = (Enums.Genders) Admin.UserGender;
-            Admin.UserFaculty = (Enums.Faculties) Admin.UserFaculty;
-            Admin.UserRole = (Enums.Roles) Admin.UserRole;
         }
 
         return Json(AdminObj);
@@ -29,9 +26,6 @@ public partial class apiController : Controller
         {
             currentAdmin = await context.Users.FindAsync(UserID) ?? default!;
             currentAdmin.UserPasswordHash = "HIDDEN";
-            currentAdmin.UserFaculty = (Enums.Faculties) currentAdmin.UserFaculty;
-            currentAdmin.UserRole = (Enums.Roles) currentAdmin.UserRole;
-            currentAdmin.UserGender = (Enums.Genders) currentAdmin.UserGender;
         }
         else
         {

@@ -48,9 +48,6 @@ public partial class apiController : Controller
         foreach (Teacher currentTeacher in TeachersObj)
         {
             currentTeacher.User = await context.Users.FindAsync(currentTeacher.UserID) ?? default!;
-            currentTeacher.User.UserFaculty = (Enums.Faculties)currentTeacher.User.UserFaculty;
-            currentTeacher.User.UserRole = (Enums.Roles)currentTeacher.User.UserRole;
-            currentTeacher.User.UserGender = (Enums.Genders)currentTeacher.User.UserGender;
             currentTeacher.User.UserPasswordHash = "HIDDEN";
         }
 
@@ -66,9 +63,6 @@ public partial class apiController : Controller
             currentTeacher = await context.Teachers.FindAsync(UserID) ?? default!;
             currentTeacher.User = await context.Users.FindAsync(UserID) ?? default!;
             currentTeacher.User.UserPasswordHash = "HIDDEN";
-            currentTeacher.User.UserFaculty = (Enums.Faculties)currentTeacher.User.UserFaculty;
-            currentTeacher.User.UserRole = (Enums.Roles)currentTeacher.User.UserRole;
-            currentTeacher.User.UserGender = (Enums.Genders)currentTeacher.User.UserGender;
         }
         else
         {

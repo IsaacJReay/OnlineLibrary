@@ -33,12 +33,8 @@ public partial class apiController : Controller
 
         foreach (Video video in VideoObj) 
         {
-            video.VideoFaculty = (Enums.Faculties)  video.VideoFaculty;
             video.Teacher = await context.Teachers.FindAsync(video.TeacherID) ?? default!;
             video.Teacher.User = await context.Users.FindAsync(video.TeacherID) ?? default!;
-            video.Teacher.User.UserFaculty = (Enums.Faculties) video.Teacher.User.UserFaculty;
-            video.Teacher.User.UserGender = (Enums.Genders) video.Teacher.User.UserGender;
-            video.Teacher.User.UserRole = (Enums.Roles) video.Teacher.User.UserRole;
             video.Teacher.User.UserPasswordHash = "HIDDEN";
         }
         return Json(VideoObj);
@@ -51,12 +47,8 @@ public partial class apiController : Controller
         if (await context.Videos.FindAsync(VideoID) != null)
         {
             currentVideo = await context.Videos.FindAsync(VideoID) ?? default!;
-            currentVideo.VideoFaculty = (Enums.Faculties)  currentVideo.VideoFaculty;
             currentVideo.Teacher = await context.Teachers.FindAsync(currentVideo.TeacherID) ?? default!;
             currentVideo.Teacher.User = await context.Users.FindAsync(currentVideo.TeacherID) ?? default!;
-            currentVideo.Teacher.User.UserFaculty = (Enums.Faculties) currentVideo.Teacher.User.UserFaculty;
-            currentVideo.Teacher.User.UserGender = (Enums.Genders) currentVideo.Teacher.User.UserGender;
-            currentVideo.Teacher.User.UserRole = (Enums.Roles) currentVideo.Teacher.User.UserRole;
             currentVideo.Teacher.User.UserPasswordHash = "HIDDEN";
         }
         else
@@ -87,12 +79,8 @@ public partial class apiController : Controller
 
         foreach (Video video in currentVideos) 
         {
-            video.VideoFaculty = (Enums.Faculties)  video.VideoFaculty;
             video.Teacher = await context.Teachers.FindAsync(video.TeacherID) ?? default!;
             video.Teacher.User = await context.Users.FindAsync(video.TeacherID) ?? default!;
-            video.Teacher.User.UserFaculty = (Enums.Faculties) video.Teacher.User.UserFaculty;
-            video.Teacher.User.UserGender = (Enums.Genders) video.Teacher.User.UserGender;
-            video.Teacher.User.UserRole = (Enums.Roles) video.Teacher.User.UserRole;
             video.Teacher.User.UserPasswordHash = "HIDDEN";
         }
 
