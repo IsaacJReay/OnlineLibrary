@@ -11,11 +11,13 @@ public partial class apiController : Controller
 {
     protected readonly OnlineLibraryDbContext context = default!;
     protected readonly IConfiguration configuration = default!;
+    protected readonly IWebHostEnvironment env = default!;
 
-    public apiController(OnlineLibraryDbContext context, IConfiguration configuration)
+    public apiController(OnlineLibraryDbContext context, IConfiguration configuration, IWebHostEnvironment env)
     {
         this.context = context;
         this.configuration = configuration;
+        this.env = env;
     }
 
     protected async Task<string> CreatePasswordHashAsync(string password)
@@ -57,7 +59,7 @@ public partial class apiController : Controller
 
     protected async Task<(string, string)> UploadAsync(IFormFile currentFile, bool isPhoto)
     {
-        string destination = isPhoto ? Path.Combine("/home/isaac/projects/OnlineLibrary/", "images") : Path.Combine("/home/isaac/projects/OnlineLibrary/", "files"); ;
+        string destination = isPhoto ? Path.Combine(env.WebRootPath, "images") : Path.Combine(env.WebRootPath, "files"); ;
 
         if (!Directory.Exists(destination))
         {
