@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 

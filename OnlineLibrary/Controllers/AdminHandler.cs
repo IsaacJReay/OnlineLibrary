@@ -55,6 +55,7 @@ public partial class apiController : Controller
             UserPasswordHash = passwordhash,
             PathToUserPhoto = filename
         };
+        
         await context.Users.AddAsync(currentUser);
         await context.SaveChangesAsync();
 
