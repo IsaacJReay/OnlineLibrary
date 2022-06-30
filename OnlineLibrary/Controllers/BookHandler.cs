@@ -33,41 +33,71 @@ public partial class apiController : Controller
     public async Task<IActionResult> booklist()
     {
         List<Book> BookObj = await context.Books.ToListAsync();
+        
+        foreach (Book book in BookObj) 
+        {
+            book.BookFaculty = (Enums.Faculties) book.BookFaculty;
+            book.Teacher = await context.Teachers.FindAsync(book.TeacherID) ?? default!;
+            book.Teacher.User = await context.Users.FindAsync(book.TeacherID) ?? default!;
+            book.Teacher.User.UserPasswordHash = "HIDDEN";
+            book.Teacher.User.UserFaculty = (Enums.Faculties) book.Teacher.User.UserFaculty;
+            book.Teacher.User.UserGender = (Enums.Genders) book.Teacher.User.UserGender;
+            book.Teacher.User.UserRole = (Enums.Roles) book.Teacher.User.UserRole;
+        }
+
         return Json(BookObj);
     }
 
-    public async Task<IActionResult> bookByID(QueryDto req)
+    public async Task<IActionResult> bookByID(string BookID)
     {
-        if (req.ID == null)
-        {
-            return BadRequest("Missing ID");
-        }
-
         Book currentBook = new Book();
 
-        try
+        if (await context.Books.FindAsync(BookID) != null) 
         {
-            currentBook = await context.Books.SingleAsync(book => book.BookID == req.ID);
+            currentBook = await context.Books.FindAsync(BookID) ?? default!;
+            currentBook.BookFaculty = (Enums.Faculties) currentBook.BookFaculty;
+            currentBook.Teacher = await context.Teachers.FindAsync(currentBook.TeacherID) ?? default!;
+            currentBook.Teacher.User = await context.Users.FindAsync(currentBook.TeacherID) ?? default!;
+            currentBook.Teacher.User.UserPasswordHash = "HIDDEN";
+            currentBook.Teacher.User.UserFaculty = (Enums.Faculties) currentBook.Teacher.User.UserFaculty;
+            currentBook.Teacher.User.UserGender = (Enums.Genders) currentBook.Teacher.User.UserGender;
+            currentBook.Teacher.User.UserRole = (Enums.Roles) currentBook.Teacher.User.UserRole;
         }
-        catch
+        else
         {
-            return BadRequest("Not found");
+            return BadRequest("Not Found");
         }
 
         return Json(currentBook);
     }
 
-    public async Task<IActionResult> bookByFaculty(QueryDto req)
+    public async Task<IActionResult> bookByFaculty(string faculty)
     {
         List<Book> currentBooks = new List<Book>();
 
+        if (!Enum.TryParse(faculty, out Enums.Faculties currentFaculty))
+        {
+            return BadRequest("Faculty Not found");
+        }
+
         try
         {
-            currentBooks = await context.Books.Where(book => book.BookFaculty == req.Faculty).ToListAsync();
+            currentBooks = await context.Books.Where(book => book.BookFaculty == currentFaculty).ToListAsync();
         }
         catch
         {
             return BadRequest("Not found");
+        }
+
+        foreach (Book book in currentBooks) 
+        {
+            book.BookFaculty = (Enums.Faculties) book.BookFaculty;
+            book.Teacher = await context.Teachers.FindAsync(book.TeacherID) ?? default!;
+            book.Teacher.User = await context.Users.FindAsync(book.TeacherID) ?? default!;
+            book.Teacher.User.UserPasswordHash = "HIDDEN";
+            book.Teacher.User.UserFaculty = (Enums.Faculties) book.Teacher.User.UserFaculty;
+            book.Teacher.User.UserGender = (Enums.Genders) book.Teacher.User.UserGender;
+            book.Teacher.User.UserRole = (Enums.Roles) book.Teacher.User.UserRole;
         }
 
         return Json(currentBooks);
@@ -100,24 +130,19 @@ public partial class apiController : Controller
 
         await context.SaveChangesAsync();
 
-
         return Ok("Success!");
     }
 
     [HttpDelete]
-    public async Task<IActionResult> deleteBook(QueryDto req)
+    public async Task<IActionResult> deleteBook(string BookID)
     {
-        if (req.ID == null)
-        {
-            return BadRequest("Missing ID");
-        }
 
-        if (context.Books.Find(req.ID) == null)
+        if (context.Books.Find(BookID) == null)
         {
             return BadRequest("Not found");
         }
 
-        Book book = await context.Books.FindAsync(req.ID) ?? default!;
+        Book book = await context.Books.FindAsync(BookID) ?? default!;
         context.Books.Remove(book);
         await context.SaveChangesAsync();
 

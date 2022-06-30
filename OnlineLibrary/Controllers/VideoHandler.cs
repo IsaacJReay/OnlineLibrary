@@ -30,23 +30,36 @@ public partial class apiController : Controller
     public async Task<IActionResult> videolist()
     {
         List<Video> VideoObj = await context.Videos.ToListAsync();
+
+        foreach (Video video in VideoObj) 
+        {
+            video.VideoFaculty = (Enums.Faculties)  video.VideoFaculty;
+            video.Teacher = await context.Teachers.FindAsync(video.TeacherID) ?? default!;
+            video.Teacher.User = await context.Users.FindAsync(video.TeacherID) ?? default!;
+            video.Teacher.User.UserFaculty = (Enums.Faculties) video.Teacher.User.UserFaculty;
+            video.Teacher.User.UserGender = (Enums.Genders) video.Teacher.User.UserGender;
+            video.Teacher.User.UserRole = (Enums.Roles) video.Teacher.User.UserRole;
+            video.Teacher.User.UserPasswordHash = "HIDDEN";
+        }
         return Json(VideoObj);
     }
 
-    public async Task<IActionResult> videoByID(QueryDto req)
+    public async Task<IActionResult> videoByID(string VideoID)
     {
-        if (req.ID == null)
-        {
-            return BadRequest("Missing ID");
-        }
-
         Video currentVideo = new Video();
 
-        try
+        if (await context.Videos.FindAsync(VideoID) != null)
         {
-            currentVideo = await context.Videos.SingleAsync(video => video.VideoID == req.ID);
+            currentVideo = await context.Videos.FindAsync(VideoID) ?? default!;
+            currentVideo.VideoFaculty = (Enums.Faculties)  currentVideo.VideoFaculty;
+            currentVideo.Teacher = await context.Teachers.FindAsync(currentVideo.TeacherID) ?? default!;
+            currentVideo.Teacher.User = await context.Users.FindAsync(currentVideo.TeacherID) ?? default!;
+            currentVideo.Teacher.User.UserFaculty = (Enums.Faculties) currentVideo.Teacher.User.UserFaculty;
+            currentVideo.Teacher.User.UserGender = (Enums.Genders) currentVideo.Teacher.User.UserGender;
+            currentVideo.Teacher.User.UserRole = (Enums.Roles) currentVideo.Teacher.User.UserRole;
+            currentVideo.Teacher.User.UserPasswordHash = "HIDDEN";
         }
-        catch
+        else
         {
             return BadRequest("Not found");
         }
@@ -54,17 +67,33 @@ public partial class apiController : Controller
         return Json(currentVideo);
     }
 
-    public async Task<IActionResult> videoByFaculty(QueryDto req)
+    public async Task<IActionResult> videoByFaculty(string faculty)
     {
         List<Video> currentVideos = new List<Video>();
 
+        if (Enum.TryParse(faculty, out Enums.Faculties currentFaculty))
+        {
+            return BadRequest("Not Found");
+        }
+
         try
         {
-            currentVideos = await context.Videos.Where(video => video.VideoFaculty == req.Faculty).ToListAsync();
+            currentVideos = await context.Videos.Where(video => video.VideoFaculty == currentFaculty).ToListAsync();
         }
         catch
         {
             return BadRequest("Not found");
+        }
+
+        foreach (Video video in currentVideos) 
+        {
+            video.VideoFaculty = (Enums.Faculties)  video.VideoFaculty;
+            video.Teacher = await context.Teachers.FindAsync(video.TeacherID) ?? default!;
+            video.Teacher.User = await context.Users.FindAsync(video.TeacherID) ?? default!;
+            video.Teacher.User.UserFaculty = (Enums.Faculties) video.Teacher.User.UserFaculty;
+            video.Teacher.User.UserGender = (Enums.Genders) video.Teacher.User.UserGender;
+            video.Teacher.User.UserRole = (Enums.Roles) video.Teacher.User.UserRole;
+            video.Teacher.User.UserPasswordHash = "HIDDEN";
         }
 
         return Json(currentVideos);
@@ -102,19 +131,14 @@ public partial class apiController : Controller
     }
 
     [HttpDelete]
-    public async Task<IActionResult> deleteVideo(QueryDto req)
+    public async Task<IActionResult> deleteVideo(string VideoID)
     {
-        if (req.ID == null)
-        {
-            return BadRequest("Missing ID");
-        }
-
-        if (await context.Videos.FindAsync(req.ID) == null)
+        if (await context.Videos.FindAsync(VideoID) == null)
         {
             return BadRequest("Not found");
         }
 
-        Video Video = await context.Videos.FindAsync(req.ID) ?? default!;
+        Video Video = await context.Videos.FindAsync(VideoID) ?? default!;
         context.Videos.Remove(Video);
 
         await context.SaveChangesAsync();

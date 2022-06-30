@@ -19,34 +19,14 @@ public partial class apiController : Controller
         this.configuration = configuration;
     }
 
-    protected async Task<(byte[], byte[])> CreatePasswordHashAsync(string password)
+    protected async Task<string> CreatePasswordHashAsync(string password)
     {
-        using (HMACSHA512 hmac = new HMACSHA512())
-        {
-            return (
-                hmac.Key,
-                hmac.ComputeHash(
-                    await Task.Run(
-                        () => System.Text.Encoding.UTF8.GetBytes(
-                            password
-                        )
-                    )
-                )
-            );
-        }
+        return await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(password));
     }
 
-    protected bool VerifyPasswordHash(string UserPassword, byte[] UserpasswordHash, byte[] UserpasswordSalt)
+    protected bool VerifyPasswordHash(string UserPassword, string UserpasswordHash)
     {
-        using (HMACSHA512 hmac = new HMACSHA512(UserpasswordSalt))
-        {
-            byte[] computeHash = hmac.ComputeHash(
-                System.Text.Encoding.UTF8.GetBytes(
-                    UserPassword
-                )
-            );
-            return computeHash.SequenceEqual(UserpasswordHash);
-        }
+        return BCrypt.Net.BCrypt.Verify(UserPassword, UserpasswordHash);
     }
 
     protected async Task<string> CreateToken(User User)
@@ -78,7 +58,7 @@ public partial class apiController : Controller
 
     protected async Task<(string, string)> UploadAsync(IFormFile currentFile, bool isPhoto)
     {
-        string destination = isPhoto ? Path.Combine("/home/isaac/project/OnlineLibrary/", "images") : Path.Combine("/home/isaac/project/OnlineLibrary/", "files"); ;
+        string destination = isPhoto ? Path.Combine("/home/isaac/projects/OnlineLibrary/", "images") : Path.Combine("/home/isaac/projects/OnlineLibrary/", "files"); ;
 
         if (!Directory.Exists(destination))
         {

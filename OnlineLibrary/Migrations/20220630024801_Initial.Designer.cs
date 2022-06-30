@@ -11,7 +11,7 @@ using OnlineLibrary.Data;
 namespace OnlineLibrary.Migrations
 {
     [DbContext(typeof(OnlineLibraryDbContext))]
-    [Migration("20220628123356_Initial")]
+    [Migration("20220630024801_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,13 +124,9 @@ namespace OnlineLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<byte[]>("UserPasswordHash")
+                    b.Property<string>("UserPasswordHash")
                         .IsRequired()
-                        .HasColumnType("longblob");
-
-                    b.Property<byte[]>("UserPasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("longblob");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("UserRole")
                         .HasColumnType("int");

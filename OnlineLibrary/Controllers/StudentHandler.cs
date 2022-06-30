@@ -9,7 +9,7 @@ public partial class apiController : Controller
     [HttpPost]
     public async Task<IActionResult> registerStudent(StudentDto req)
     {
-        (byte[] passwordhash, byte[] passwordSalt) = await CreatePasswordHashAsync(req.UserPassword);
+        string passwordhash = await CreatePasswordHashAsync(req.UserPassword);
         (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
 
         User currentUser = new User
@@ -24,7 +24,6 @@ public partial class apiController : Controller
             UserTel = req.UserTel,
             UserEmail = req.UserEmail,
             UserPasswordHash = passwordhash,
-            UserPasswordSalt = passwordSalt,
             PathToUserPhoto = filename
         };
 
@@ -46,23 +45,32 @@ public partial class apiController : Controller
     public async Task<IActionResult> studentlist()
     {
         List<Student> StudentObj = await context.Students.ToListAsync();
+        
+        foreach (Student student in StudentObj) 
+        {
+            student.User = await context.Users.FindAsync(student.UserID) ?? default!;
+            student.User.UserFaculty = (Enums.Faculties) student.User.UserFaculty;
+            student.User.UserRole = (Enums.Roles) student.User.UserRole;
+            student.User.UserGender = (Enums.Genders) student.User.UserGender;
+            student.User.UserPasswordHash = "HIDDEN";
+        }
         return Json(StudentObj);
     }
 
-    public async Task<IActionResult> studentByID(QueryDto req)
+    public async Task<IActionResult> studentByID(string UserID)
     {
-        if (req.ID == null)
-        {
-            return BadRequest("Missing ID");
-        }
-
         Student currentStudent = new Student();
 
-        try
+        if (await context.Students.FindAsync(UserID) != null)
         {
-            currentStudent = await context.Students.SingleAsync(student => student.UserID == req.ID);
+            currentStudent = await context.Students.FindAsync(UserID) ?? default!;
+            currentStudent.User = await context.Users.FindAsync(UserID) ?? default!;
+            currentStudent.User.UserPasswordHash = "HIDDEN";
+            currentStudent.User.UserFaculty = (Enums.Faculties) currentStudent.User.UserFaculty;
+            currentStudent.User.UserRole = (Enums.Roles) currentStudent.User.UserRole;
+            currentStudent.User.UserGender = (Enums.Genders) currentStudent.User.UserGender;
         }
-        catch
+        else
         {
             return BadRequest("Not found");
         }
@@ -109,22 +117,17 @@ public partial class apiController : Controller
     }
 
     [HttpDelete]
-    public async Task<IActionResult> deleteStudent(QueryDto req)
+    public async Task<IActionResult> deleteStudent(string UserID)
     {
-        if (req.ID == null)
-        {
-            return BadRequest("Missing ID");
-        }
-
-        if (await context.Users.FindAsync(req.ID) == null)
+        if (await context.Users.FindAsync(UserID) == null)
         {
             return BadRequest("Not found");
         }
 
-        Student student = await context.Students.FindAsync(req.ID) ?? default!;
+        Student student = await context.Students.FindAsync(UserID) ?? default!;
         context.Students.Remove(student);
 
-        User user = await context.Users.FindAsync(req.ID) ?? default!;
+        User user = await context.Users.FindAsync(UserID) ?? default!;
         context.Users.Remove(user);
 
         await context.SaveChangesAsync();

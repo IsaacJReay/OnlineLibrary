@@ -122,13 +122,9 @@ namespace OnlineLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<byte[]>("UserPasswordHash")
+                    b.Property<string>("UserPasswordHash")
                         .IsRequired()
-                        .HasColumnType("longblob");
-
-                    b.Property<byte[]>("UserPasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("longblob");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("UserRole")
                         .HasColumnType("int");

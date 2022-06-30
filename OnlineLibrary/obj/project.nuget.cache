@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "MElHFMkWOCTKOSwvhQqWyTMckEWOlyW44TCmiKo3+iGxoRaEf+YmuylEgiW0mzddx2SihIzYf2LujM1oezVDRQ==",
+  "dgSpecHash": "akSun1zvnhpRTmReLPtV0EJdnhfI3wGxZWmFZfXyxSFsW0dlGjyIxJThoQHA8FgwQmezDPY3N3beUs8KxouzwQ==",
   "success": true,
   "projectFilePath": "/home/isaac/projects/OnlineLibrary/OnlineLibrary/OnlineLibrary.csproj",
   "expectedPackageFiles": [
+    "/home/isaac/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/isaac/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/isaac/.nuget/packages/microsoft.aspnetcore.authentication.abstractions/2.2.0/microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "/home/isaac/.nuget/packages/microsoft.aspnetcore.authentication.core/2.2.0/microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",

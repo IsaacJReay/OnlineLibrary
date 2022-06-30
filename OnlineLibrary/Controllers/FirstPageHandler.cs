@@ -10,18 +10,19 @@ public partial class apiController : Controller
     public async Task<IActionResult> login(LoginDto req)
     {
         User CurrentUser = new User();
-        try
+
+        if (await context.Users.FindAsync(req.UserID) != null)
         {
-            CurrentUser = await context.Users.SingleAsync(User => User.UserID == req.UserID);
+            CurrentUser = await context.Users.FindAsync(req.UserID) ?? default!;
         }
-        catch
+        else
         {
-            return BadRequest("Not Found");
+            return BadRequest("Not Found in DB");
         }
 
-        if (!VerifyPasswordHash(req.Password, CurrentUser.UserPasswordHash, CurrentUser.UserPasswordSalt))
+        if (!VerifyPasswordHash(req.Password, CurrentUser.UserPasswordHash))
         {
-            return BadRequest("Not Found");
+            return BadRequest("Incorrect Password");
         }
 
         string token = await CreateToken(CurrentUser);

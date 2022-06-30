@@ -30,8 +30,8 @@ namespace OnlineLibrary.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserEmail = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserPasswordHash = table.Column<byte[]>(type: "longblob", nullable: false),
-                    UserPasswordSalt = table.Column<byte[]>(type: "longblob", nullable: false),
+                    UserPasswordHash = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     PathToUserPhoto = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },

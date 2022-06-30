@@ -5,10 +5,46 @@ namespace OnlineLibrary.Controllers;
 
 public partial class apiController : Controller
 {
+    public async Task<IActionResult> adminlist()
+    {
+        Enum.TryParse("Admin", out Enums.Roles adminRole);
+        List<User> AdminObj = await Task.Run(() => context.Users.Where(user => user.UserRole == adminRole).ToList());
+
+        foreach (User Admin in AdminObj)
+        {
+            Admin.UserPasswordHash = "HIDDEN";
+            Admin.UserGender = (Enums.Genders) Admin.UserGender;
+            Admin.UserFaculty = (Enums.Faculties) Admin.UserFaculty;
+            Admin.UserRole = (Enums.Roles) Admin.UserRole;
+        }
+
+        return Json(AdminObj);
+    }
+
+    public async Task<IActionResult> adminByID(string UserID)
+    {
+        User currentAdmin = new User();
+
+        if (await context.Users.FindAsync(UserID) != null)
+        {
+            currentAdmin = await context.Users.FindAsync(UserID) ?? default!;
+            currentAdmin.UserPasswordHash = "HIDDEN";
+            currentAdmin.UserFaculty = (Enums.Faculties) currentAdmin.UserFaculty;
+            currentAdmin.UserRole = (Enums.Roles) currentAdmin.UserRole;
+            currentAdmin.UserGender = (Enums.Genders) currentAdmin.UserGender;
+        }
+        else
+        {
+            return BadRequest("Not found");
+        }
+
+        return Json(currentAdmin);
+    }
+
     [HttpPost]
     public async Task<IActionResult> registerAdmin(AdminDto req)
     {
-        (byte[] passwordhash, byte[] passwordSalt) = await CreatePasswordHashAsync(req.UserPassword);
+        string passwordhash = await CreatePasswordHashAsync(req.UserPassword);
         (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
 
         User currentUser = new User
@@ -23,7 +59,6 @@ public partial class apiController : Controller
             UserTel = req.UserTel,
             UserEmail = req.UserEmail,
             UserPasswordHash = passwordhash,
-            UserPasswordSalt = passwordSalt,
             PathToUserPhoto = filename
         };
         await context.Users.AddAsync(currentUser);
@@ -64,19 +99,14 @@ public partial class apiController : Controller
     }
 
     [HttpDelete]
-    public async Task<IActionResult> deleteAdmin(QueryDto req)
+    public async Task<IActionResult> deleteAdmin(string UserID)
     {
-        if (req.ID == null)
-        {
-            return BadRequest("Missing ID");
-        }
-
-        if (await context.Users.FindAsync(req.ID) == null)
+        if (await context.Users.FindAsync(UserID) == null)
         {
             return BadRequest("Not found");
         }
 
-        User user = await context.Users.FindAsync(req.ID) ?? default!;
+        User user = await context.Users.FindAsync(UserID) ?? default!;
         context.Users.Remove(user);
 
         await context.SaveChangesAsync();
