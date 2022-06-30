@@ -10,11 +10,6 @@ public partial class apiController : Controller
         Enum.TryParse("Admin", out Enums.Roles adminRole);
         List<User> AdminObj = await Task.Run(() => context.Users.Where(user => user.UserRole == adminRole).ToList());
 
-        // foreach (User Admin in AdminObj)
-        // {
-        //     // Admin.UserPasswordHash = "HIDDEN";
-        // }
-
         return Json(AdminObj);
     }
 
@@ -25,7 +20,6 @@ public partial class apiController : Controller
         if (await context.Users.FindAsync(UserID) != null)
         {
             currentAdmin = await context.Users.FindAsync(UserID) ?? default!;
-            // currentAdmin.UserPasswordHash = "HIDDEN";
         }
         else
         {

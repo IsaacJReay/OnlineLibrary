@@ -54,10 +54,8 @@ public partial class apiController : Controller
         foreach (Student currentStudent in StudentObj) 
         {
             currentStudent.User = await context.Users.FindAsync(currentStudent.UserID) ?? default!;
-            // currentStudent.User.UserPasswordHash = "HIDDEN";
             currentStudent.Teacher = await context.Teachers.FindAsync(currentStudent.TeacherID) ?? default!;
             currentStudent.Teacher.User = await context.Users.FindAsync(currentStudent.TeacherID) ?? default!;
-            // currentStudent.Teacher.User.UserPasswordHash = "HIDDEN";
         }
         return Json(StudentObj);
     }
@@ -70,10 +68,8 @@ public partial class apiController : Controller
         {
             currentStudent = await context.Students.FindAsync(UserID) ?? default!;
             currentStudent.User = await context.Users.FindAsync(UserID) ?? default!;
-            // currentStudent.User.UserPasswordHash = "HIDDEN";
             currentStudent.Teacher = await context.Teachers.FindAsync(currentStudent.TeacherID) ?? default!;
             currentStudent.Teacher.User = await context.Users.FindAsync(currentStudent.TeacherID) ?? default!;
-            // currentStudent.Teacher.User.UserPasswordHash = "HIDDEN";
         }
         else
         {

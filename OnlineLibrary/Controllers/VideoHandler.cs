@@ -35,7 +35,6 @@ public partial class apiController : Controller
         {
             video.Teacher = await context.Teachers.FindAsync(video.TeacherID) ?? default!;
             video.Teacher.User = await context.Users.FindAsync(video.TeacherID) ?? default!;
-            // video.Teacher.User.UserPasswordHash = "HIDDEN";
         }
         return Json(VideoObj);
     }
@@ -49,7 +48,6 @@ public partial class apiController : Controller
             currentVideo = await context.Videos.FindAsync(VideoID) ?? default!;
             currentVideo.Teacher = await context.Teachers.FindAsync(currentVideo.TeacherID) ?? default!;
             currentVideo.Teacher.User = await context.Users.FindAsync(currentVideo.TeacherID) ?? default!;
-            // currentVideo.Teacher.User.UserPasswordHash = "HIDDEN";
         }
         else
         {

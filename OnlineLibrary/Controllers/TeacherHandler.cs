@@ -53,7 +53,6 @@ public partial class apiController : Controller
         foreach (Teacher currentTeacher in TeachersObj)
         {
             currentTeacher.User = await context.Users.FindAsync(currentTeacher.UserID) ?? default!;
-            // currentTeacher.User.UserPasswordHash = "HIDDEN";
         }
 
         return Json(TeachersObj);
@@ -67,7 +66,6 @@ public partial class apiController : Controller
         {
             currentTeacher = await context.Teachers.FindAsync(UserID) ?? default!;
             currentTeacher.User = await context.Users.FindAsync(UserID) ?? default!;
-            // currentTeacher.User.UserPasswordHash = "HIDDEN";
         }
         else
         {
