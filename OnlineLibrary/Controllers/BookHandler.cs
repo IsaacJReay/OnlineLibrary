@@ -10,7 +10,7 @@ public partial class apiController : Controller
     {
         (string BookFileName, string extension) = await UploadAsync(req.BookFile, false);
 
-        if (Enum.TryParse(extension, out Enums.FileType BookExtension))
+        if (!Enum.TryParse(extension, out Enums.FileType BookExtension))
         {
             return BadRequest("Extension not supported");
         }
@@ -38,7 +38,7 @@ public partial class apiController : Controller
         {
             book.Teacher = await context.Teachers.FindAsync(book.TeacherID) ?? default!;
             book.Teacher.User = await context.Users.FindAsync(book.TeacherID) ?? default!;
-            book.Teacher.User.UserPasswordHash = "HIDDEN";
+            // book.Teacher.User.UserPasswordHash = "HIDDEN";
         }
 
         return Json(BookObj);
@@ -53,7 +53,7 @@ public partial class apiController : Controller
             currentBook = await context.Books.FindAsync(BookID) ?? default!;
             currentBook.Teacher = await context.Teachers.FindAsync(currentBook.TeacherID) ?? default!;
             currentBook.Teacher.User = await context.Users.FindAsync(currentBook.TeacherID) ?? default!;
-            currentBook.Teacher.User.UserPasswordHash = "HIDDEN";
+            // currentBook.Teacher.User.UserPasswordHash = "HIDDEN";
         }
         else
         {

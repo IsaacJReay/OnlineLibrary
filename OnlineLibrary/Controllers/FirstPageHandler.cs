@@ -9,16 +9,12 @@ public partial class apiController : Controller
     [HttpPost]
     public async Task<IActionResult> login(LoginDto req)
     {
-        User CurrentUser = new User();
-
-        if (await context.Users.FindAsync(req.UserID) != null)
-        {
-            CurrentUser = await context.Users.FindAsync(req.UserID) ?? default!;
-        }
-        else
+        if (await context.Users.FindAsync(req.UserID) == null)
         {
             return BadRequest("Not Found in DB");
         }
+        
+        User CurrentUser = await context.Users.FindAsync(req.UserID) ?? default!;
 
         if (!VerifyPasswordHash(req.Password, CurrentUser.UserPasswordHash))
         {

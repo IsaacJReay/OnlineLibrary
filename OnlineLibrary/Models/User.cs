@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace OnlineLibrary.Models;
 
 public class User {
-    [Key]
-    public string UserID { get; set; } = default!;
     public Enums.Roles UserRole { get; set; } = default!;
     public string UserName { get; set; } = default!;
     public Enums.Genders UserGender { get; set; } = default!;
@@ -13,6 +12,11 @@ public class User {
     public DateTime UserDateofBirth { get; set; } = default!;
     public string? UserTel { get; set; } = default!;
     public string? UserEmail { get; set; } = default!;
-    public string UserPasswordHash { get; set; } = default!;
     public string PathToUserPhoto { get; set; } = default!;
+
+    [Key]
+    public string UserID { get; set; } = default!;
+
+    [JsonIgnore]
+    public string UserPasswordHash { get; set; } = default!;
 }

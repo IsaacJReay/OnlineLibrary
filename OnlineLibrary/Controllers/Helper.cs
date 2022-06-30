@@ -71,6 +71,6 @@ public partial class apiController : Controller
         using FileStream fstream = new FileStream(destinationFile, FileMode.Create);
         await currentFile.CopyToAsync(fstream);
 
-        return (filename, extension);
+        return (filename, extension.Replace(".", string.Empty));
     }
 }

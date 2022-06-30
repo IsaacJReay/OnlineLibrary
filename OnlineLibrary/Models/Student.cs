@@ -11,6 +11,7 @@ public class Student
     public virtual User User { get; set; } = default!;
     public string StudentFatherName { get; set; } = default!;
     public string StudentMotherName { get; set; } = default!;
+    
     [ForeignKey("Teacher")]
     public string TeacherID { get; set; } = default!;
     public virtual Teacher Teacher { get; set; } = default!;
