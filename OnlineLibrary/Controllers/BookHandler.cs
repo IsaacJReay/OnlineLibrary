@@ -63,11 +63,11 @@ public partial class apiController : Controller
         return Json(currentBook);
     }
 
-    public async Task<IActionResult> bookByFaculty(string faculty)
+    public async Task<IActionResult> bookByFaculty(string BookFaculty)
     {
         List<Book> currentBooks = new List<Book>();
 
-        if (!Enum.TryParse(faculty, out Enums.Faculties currentFaculty))
+        if (!Enum.TryParse(BookFaculty, out Enums.Faculties currentFaculty))
         {
             return BadRequest("Faculty Not found");
         }
@@ -94,12 +94,12 @@ public partial class apiController : Controller
     [HttpPut]
     public async Task<IActionResult> editBook(BookDto req)
     {
-        if (req.oldBookID == null)
+        if (req.BookID == null)
         {
             return BadRequest("Missing ID");
         }
 
-        if (await context.Books.FindAsync(req.oldBookID) == null)
+        if (await context.Books.FindAsync(req.BookID) == null)
         {
             return BadRequest("Not found");
         }
@@ -107,7 +107,7 @@ public partial class apiController : Controller
         (string filename, string extension) = await UploadAsync(req.BookFile, false);
         Enum.TryParse(extension, out Enums.FileType ftype);
         
-        Book currentBook = await context.Books.FindAsync(req.oldBookID) ?? default!;
+        Book currentBook = await context.Books.FindAsync(req.BookID) ?? default!;
         currentBook.BookID = req.BookID;
         currentBook.BookFileType = ftype;
         currentBook.BookDate = req.BookDate;

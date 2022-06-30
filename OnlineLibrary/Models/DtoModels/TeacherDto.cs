@@ -2,7 +2,6 @@ namespace OnlineLibrary.Models;
 
 public class TeacherDto
 {
-    public string? oldUserID;
     public string UserID { get; set; } = default!;
     public string UserName { get; set; } = default!;
     public Enums.Genders UserGender { get; set; } = default!;
@@ -11,7 +10,7 @@ public class TeacherDto
     public DateTime UserDateofBirth { get; set; } = default!;
     public string? UserTel { get; set; } = default!;
     public string? UserEmail { get; set; } = default!;
-    public string UserPassword { get; set; } = default!;
+    public string? UserPassword { get; set; } = default!;
     public string TeacherDegree { get; set; } = default!;
     public string TeacherWorkExperience { get; set; } = default!;
     public IFormFile UserPhoto { get; set; } = default!;

@@ -59,11 +59,11 @@ public partial class apiController : Controller
         return Json(currentVideo);
     }
 
-    public async Task<IActionResult> videoByFaculty(string faculty)
+    public async Task<IActionResult> videoByFaculty(string VideoFaculty)
     {
         List<Video> currentVideos = new List<Video>();
 
-        if (Enum.TryParse(faculty, out Enums.Faculties currentFaculty))
+        if (!Enum.TryParse(VideoFaculty, out Enums.Faculties currentFaculty))
         {
             return BadRequest("Not Found");
         }
@@ -90,12 +90,12 @@ public partial class apiController : Controller
     [HttpPut]
     public async Task<IActionResult> editVideo(VideoDto req)
     {
-        if (req.oldVideoID == null)
+        if (req.VideoID == null)
         {
             return BadRequest("Missing ID");
         }
 
-        if (await context.Videos.FindAsync(req.oldVideoID) == null)
+        if (await context.Videos.FindAsync(req.VideoID) == null)
         {
             return BadRequest("Not found");
         }
@@ -103,7 +103,7 @@ public partial class apiController : Controller
         (string filename, string? _) = await UploadAsync(req.VideoFile, false);
         (string thumbnail, string? _) = await UploadAsync(req.VideoThumbnail, true);
         
-        Video currentVideo = await context.Videos.FindAsync(req.oldVideoID) ?? default!;
+        Video currentVideo = await context.Videos.FindAsync(req.VideoID) ?? default!;
         currentVideo.VideoID = req.VideoID;
         currentVideo.PathToVideoThumbnail = thumbnail;
         currentVideo.VideoDate = req.VideoDate;

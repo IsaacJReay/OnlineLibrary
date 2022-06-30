@@ -38,6 +38,11 @@ public partial class apiController : Controller
     [HttpPost]
     public async Task<IActionResult> registerAdmin(AdminDto req)
     {
+        if (req.UserPassword == null)
+        {
+            return BadRequest("Password cannot be null");
+        }
+        
         string passwordhash = await CreatePasswordHashAsync(req.UserPassword);
         (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
 
@@ -65,20 +70,14 @@ public partial class apiController : Controller
     [HttpPut]
     public async Task<IActionResult> editAdmin(AdminDto req)
     {
-        if (req.oldUserID == null)
-        {
-            return BadRequest("Missing Old ID");
-        }
-
-        if (await context.Users.FindAsync(req.oldUserID) == null)
+        if (await context.Users.FindAsync(req.UserID) == null)
         {
             return BadRequest("Not found");
         }
 
         (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
 
-        User currentUser = await context.Users.FindAsync(req.oldUserID) ?? default!;
-        currentUser.UserID = req.UserID;
+        User currentUser = await context.Users.FindAsync(req.UserID) ?? default!;
         currentUser.UserName = req.UserName;
         currentUser.UserGender = req.UserGender;
         currentUser.UserFaculty = req.UserFaculty;

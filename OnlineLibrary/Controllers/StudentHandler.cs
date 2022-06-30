@@ -9,6 +9,11 @@ public partial class apiController : Controller
     [HttpPost]
     public async Task<IActionResult> registerStudent(StudentDto req)
     {
+        if (req.UserPassword == null)
+        {
+            return BadRequest("Password cannot be null");
+        }
+        
         string passwordhash = await CreatePasswordHashAsync(req.UserPassword);
         (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
 
@@ -81,27 +86,19 @@ public partial class apiController : Controller
     [HttpPut]
     public async Task<IActionResult> editStudent(StudentDto req)
     {
-        if (req.oldUserID == null)
-        {
-            return BadRequest("Missing Old ID");
-        }
-
-        if (await context.Users.FindAsync(req.oldUserID) == null)
+        if (await context.Users.FindAsync(req.UserID) == null)
         {
             return BadRequest("Not found");
         }
 
         (string filename, string? _) = await UploadAsync(req.UserPhoto, true);
 
-
-        Student currentStudent = await context.Students.FindAsync(req.oldUserID) ?? default!;
-        currentStudent.UserID = req.UserID;
+        Student currentStudent = await context.Students.FindAsync(req.UserID) ?? default!;
         currentStudent.StudentFatherName = req.StudentFatherName;
         currentStudent.StudentMotherName = req.StudentMotherName;
         currentStudent.TeacherID = req.TeacherID;
 
-        User currentUser = await context.Users.FindAsync(req.oldUserID) ?? default!;
-        currentUser.UserID = req.UserID;
+        User currentUser = await context.Users.FindAsync(req.UserID) ?? default!;
         currentUser.UserName = req.UserName;
         currentUser.UserGender = req.UserGender;
         currentUser.UserFaculty = req.UserFaculty;
