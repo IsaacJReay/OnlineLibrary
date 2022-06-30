@@ -11,7 +11,7 @@ using OnlineLibrary.Data;
 namespace OnlineLibrary.Migrations
 {
     [DbContext(typeof(OnlineLibraryDbContext))]
-    [Migration("20220630024801_Initial")]
+    [Migration("20220630063054_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -11,6 +11,7 @@ builder.Services.AddDbContext<OnlineLibraryDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 WebApplication app = builder.Build();
 

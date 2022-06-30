@@ -1,6 +1,3 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
 namespace OnlineLibrary.Models;
 
 public class Enums
@@ -11,6 +8,7 @@ public class Enums
         Student,
         Admin
     }
+
     public enum Genders
     {
         Male,
@@ -19,22 +17,14 @@ public class Enums
 
     public enum Faculties
     {
-        [Display(Name = "Faculty of Economic and Agriculture")]
-        Economic_Agriculture,
-        [Display(Name = "Faculty of Tourism and Hospitality")]
-        Tourism_Hospitality,
-        [Display(Name = "Faculty of Engineering and Architecture")]
-        Engineering_Architecture,
-        [Display(Name = "Faculty of Law and Social Sciences")]
-        Law_SocialSciences,
-        [Display(Name = "Faculty of Business Administration")]
-        Business_Administration,
-        [Display(Name = "Faculty of Science and Technology")]
-        Science_Technology,
-        [Display(Name = "Faculty of Art, Humanities, and Languages")]
-        Art_Humanities_Languages,
-        [Display(Name = "School of Doctoral Studies")]
-        Doctoral_Studies
+        Faculty_of_Economic_and_Agriculture,
+        Faculty_of_Tourism_and_Hospitality,
+        Faculty_of_Engineering_and_Architecture,
+        Faculty_of_Law_and_Social_Sciences,
+        Faculty_of_Business_Administration,
+        Faculty_of_Science_and_Technology,
+        Faculty_of_Art_Humanities_and_Languages,
+        Faculty_of_Doctoral_Studies
     }
 
     public enum FileType
