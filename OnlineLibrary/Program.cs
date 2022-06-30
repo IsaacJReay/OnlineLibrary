@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
 using OnlineLibrary.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -10,8 +11,9 @@ builder.Services.AddDbContext<OnlineLibraryDbContext>(options =>
 });
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers().AddNewtonsoftJson(
+    jsonOption => jsonOption.SerializerSettings.Converters.Add(new StringEnumConverter())
+);
 
 WebApplication app = builder.Build();
 
